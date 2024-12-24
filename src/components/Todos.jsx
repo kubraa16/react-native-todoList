@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const Todos = ({tasks, setTasks, deleteTodo, toggleComplete}) => {
+const Todos = ({tasks, setTasks, deleteModal, toggleComplete}) => {
   return (
     <View style={styles.container}>
       <FlatList
@@ -18,7 +18,7 @@ const Todos = ({tasks, setTasks, deleteTodo, toggleComplete}) => {
               style={[styles.taskText, item.completed && styles.completedTask]}>
               {item.text}
             </Text>
-            <TouchableOpacity onPress={() => deleteTodo(item.id)}>
+            <TouchableOpacity onPress={() => deleteModal(item.id)}>
               <Icon name="trash" size={24} color="black" />
             </TouchableOpacity>
           </View>

@@ -2,29 +2,41 @@ import React, {useState} from 'react';
 import Input from './src/components/Input';
 import {View} from 'react-native';
 import Todos from './src/components/Todos';
+import CustomModal from './src/components/CustomModal';
 
 const App = () => {
+  const [modalVisible, setModalVisible] = useState(false);
   const [value, setValue] = useState('');
   const [tasks, setTasks] = useState([
     {id: 1, text: 'Doctor Appointment', completed: true},
     {id: 2, text: 'Meeting at School', completed: false},
   ]);
+  const [id, setId] = useState('');
   function addTodo() {
     const newtask = {id: Date.now(), text: value, completed: false};
     setTasks([...tasks, newtask]);
     setValue('');
   }
-  function deleteTodo(taskId) {
+  function deleteTodo() {
+    const taskId = id;
     const updatedItem = tasks.filter(task => task.id !== taskId);
     setTasks(updatedItem);
+    setModalVisible(false);
+  }
+  function deleteModal(taskId) {
+    setModalVisible(true);
+    setId(taskId);
   }
   function toggleComplete(taskId) {
-    console.log(taskId);
-    console.log('Before toggle:', tasks);
     const updatedTask = tasks.map(task =>
       task.id === taskId ? {...task, completed: !task.completed} : task,
     );
-    console.log('After toggle:', updatedTask);
+
+    updatedTask.sort((a, b) => {
+      if (a.completed && !b.completed) return 1;
+      if (!a.completed && b.completed) return -1;
+      return 0;
+    });
     setTasks(updatedTask);
   }
 
@@ -34,8 +46,13 @@ const App = () => {
       <Todos
         tasks={tasks}
         setTasks={setTasks}
-        deleteTodo={deleteTodo}
         toggleComplete={toggleComplete}
+        deleteModal={deleteModal}
+      />
+      <CustomModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        deleteTodo={deleteTodo}
       />
     </View>
   );
