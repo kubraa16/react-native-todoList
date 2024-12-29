@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Input from './src/components/Input';
 import Todos from './src/components/Todos';
 import CustomModal from './src/components/CustomModal';
+import { NavigationContainer } from '@react-navigation/native';
 
 const STORAGE_KEY = '@my_tasks';
 
@@ -22,8 +23,8 @@ const App = () => {
           setTasks(JSON.parse(storedTasks));
         } else {
           setTasks([
-            {id: 1, text: 'Doctor Appointment', completed: true},
-            {id: 2, text: 'Meeting at School', completed: false},
+            {id: 1, text: 'Doctor Appointment', status: 'todo'},
+            {id: 2, text: 'Meeting at School', status: 'done'},
           ]);
         }
       } catch (error) {
@@ -47,7 +48,7 @@ const App = () => {
 
   function addTodo() {
     if (!value.trim()) return;
-    const newTask = {id: Date.now(), text: value, completed: false};
+    const newTask = {id: Date.now(), text: value, status: 'todo'};
     setTasks(prevTasks => [...prevTasks, newTask]);
     setValue('');
   }
@@ -64,23 +65,28 @@ const App = () => {
     setId(null);
   }
 
-  function toggleComplete(taskId) {
-    const updatedTasks = tasks.map(task =>
-      task.id === taskId ? {...task, completed: !task.completed} : task,
-    );
-
-    updatedTasks.sort((a, b) => {
-      if (a.completed && !b.completed) return 1;
-      if (!a.completed && b.completed) return -1;
-      return 0;
+  function toggleComplete(taskId, newStatus) {
+    const updatedTasks = tasks.map(task => {
+      if (taskId === task.id) {
+        return {...task, status: newStatus};
+      }
+      return task;
     });
 
+    updatedTasks.sort((a, b) => {
+      const statusOrder = {todo: 1, wip: 2, done: 3};
+      return statusOrder[a.status] - statusOrder[b.status];
+    });
     setTasks(updatedTasks);
   }
+
 
   return (
     <View>
       <Input value={value} setValue={setValue} addTodo={addTodo} />
+      <NavigationContainer>
+        
+      </NavigationContainer>
       <Todos
         tasks={tasks}
         toggleComplete={toggleComplete}

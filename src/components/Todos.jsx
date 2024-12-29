@@ -2,6 +2,7 @@ import CheckBox from '@react-native-community/checkbox';
 import React, {useState} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {Picker} from '@react-native-picker/picker';
 
 const Todos = ({tasks, setTasks, deleteModal, toggleComplete}) => {
   return (
@@ -11,11 +12,22 @@ const Todos = ({tasks, setTasks, deleteModal, toggleComplete}) => {
         keyExtractor={item => item.id.toString()}
         renderItem={({item}) => (
           <View style={styles.taskItem}>
-            <TouchableOpacity onPress={() => toggleComplete(item.id)}>
-              <Text>{item.completed ? '✔' : '✗'}</Text>
-            </TouchableOpacity>
+            <Picker
+              selectedValue={item.status}
+              onValueChange={newValue => {
+                console.log('Picker changed to:', newValue);
+                toggleComplete(item.id, newValue);
+              }}
+              style={{width: 120, marginRight: 10}}>
+              <Picker.Item style={{color: 'red'}} label="To Do" value="todo" />
+              <Picker.Item style={{color: '#dbd330'}} label="WIP" value="wip" />
+              <Picker.Item style={{color: 'green'}} label="Done" value="done" />
+            </Picker>
             <Text
-              style={[styles.taskText, item.completed && styles.completedTask]}>
+              style={[
+                styles.taskText,
+                styles[item.status],
+              ]}>
               {item.text}
             </Text>
             <TouchableOpacity onPress={() => deleteModal(item.id)}>
@@ -49,9 +61,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-  completedTask: {
+  done: {
     textDecorationLine: 'line-through',
     color: '#aaa',
+  },
+  wip: {
+    color: 'green',
+    borderColor: 'green',
+    borderRadius: 8,
   },
 });
 

@@ -7,11 +7,10 @@ const CustomModal = ({modalVisible, setModalVisible, deleteTodo}) => {
       <Button title="Open Modal" onPress={() => setModalVisible(true)} />
 
       <Modal
-        animationType="slide" // 'slide' or 'fade'
-        transparent={true} // makes the modal background transparent
+        animationType="slide"
+        transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          // This is required on Android to handle the Back button
           setModalVisible(false);
         }}>
         <View style={styles.modalBackdrop}>
@@ -40,7 +39,7 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', // semi-transparent backdrop
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
   },
