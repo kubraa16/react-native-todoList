@@ -5,8 +5,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Input from './src/components/Input';
 import Todos from './src/components/Todos';
 import CustomModal from './src/components/CustomModal';
-import { NavigationContainer } from '@react-navigation/native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
+const Tab = createBottomTabNavigator();
 const STORAGE_KEY = '@my_tasks';
 
 const App = () => {
@@ -80,24 +83,71 @@ const App = () => {
     setTasks(updatedTasks);
   }
 
+  const tabs = {
+    all: {label: 'All', icon: {focused: 'list', default: 'list-outline'}},
+    todo: {
+      label: 'Todo',
+      icon: {focused: 'checkmark', default: 'checkmark-outline'},
+    },
+    wip: {label: 'Wip', icon: {focused: 'hammer', default: 'hammer-outline'}},
+    done: {
+      label: 'Done',
+      icon: {focused: 'checkmark-done', default: 'checkmark-done-outline'},
+    },
+  };
 
   return (
-    <View>
-      <Input value={value} setValue={setValue} addTodo={addTodo} />
-      <NavigationContainer>
-        
-      </NavigationContainer>
-      <Todos
-        tasks={tasks}
-        toggleComplete={toggleComplete}
-        deleteModal={deleteModal}
-      />
-      <CustomModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-        deleteTodo={deleteTodo}
-      />
-    </View>
+    <>
+      <View style={{flex: 1}}>
+        <Input value={value} setValue={setValue} addTodo={addTodo} />
+        <NavigationContainer>
+          <Tab.Navigator
+            initialRouteName="All"
+            screenOptions={({route}) => ({
+              tabBarIcon: ({focused, color, size}) => {
+                const tabKey = Object.keys(tabs).find(
+                  key => tabs[key].label === route.name,
+                );
+                if (!tabKey) {
+                  return (
+                    <Ionicons name="help-circle" size={size} color={color} />
+                  );
+                }
+                const iconName = focused
+                  ? tabs[tabKey].icon.focused
+                  : tabs[tabKey].icon.default;
+                return <Ionicons name={iconName} size={size} color={color} />;
+              },
+              tabBarActiveTintColor: 'blue',
+              tabBarInactiveTintColor: 'gray',
+              headerShown: false,
+            })}>
+            {Object.keys(tabs).map(tab => (
+              <Tab.Screen name={tabs[tab].label} options={{headerShown: false}}>
+                {() => (
+                  <Todos
+                    tasks={
+                      tab === 'all'
+                        ? tasks
+                        : tasks.filter(task => task.status === tab)
+                    }
+                    toggleComplete={toggleComplete}
+                    deleteModal={deleteModal}
+                  />
+                )}
+              </Tab.Screen>
+            ))}
+          </Tab.Navigator>
+        </NavigationContainer>
+      </View>
+      {modalVisible && (
+        <CustomModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          deleteTodo={deleteTodo}
+        />
+      )}
+    </>
   );
 };
 

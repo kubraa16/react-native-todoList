@@ -4,8 +4,6 @@ import {View, Text, Button, Modal, StyleSheet} from 'react-native';
 const CustomModal = ({modalVisible, setModalVisible, deleteTodo}) => {
   return (
     <View style={styles.container}>
-      <Button title="Open Modal" onPress={() => setModalVisible(true)} />
-
       <Modal
         animationType="slide"
         transparent={true}

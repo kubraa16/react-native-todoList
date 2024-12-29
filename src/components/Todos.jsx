@@ -23,11 +23,7 @@ const Todos = ({tasks, setTasks, deleteModal, toggleComplete}) => {
               <Picker.Item style={{color: '#dbd330'}} label="WIP" value="wip" />
               <Picker.Item style={{color: 'green'}} label="Done" value="done" />
             </Picker>
-            <Text
-              style={[
-                styles.taskText,
-                styles[item.status],
-              ]}>
+            <Text style={[styles.taskText, styles[item.status]]}>
               {item.text}
             </Text>
             <TouchableOpacity onPress={() => deleteModal(item.id)}>
@@ -64,11 +60,6 @@ const styles = StyleSheet.create({
   done: {
     textDecorationLine: 'line-through',
     color: '#aaa',
-  },
-  wip: {
-    color: 'green',
-    borderColor: 'green',
-    borderRadius: 8,
   },
 });
 
