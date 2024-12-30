@@ -19,9 +19,24 @@ const Todos = ({tasks, setTasks, deleteModal, toggleComplete}) => {
                 toggleComplete(item.id, newValue);
               }}
               style={{width: 120, marginRight: 10}}>
-              <Picker.Item style={{color: 'red'}} label="To Do" value="todo" />
-              <Picker.Item style={{color: '#dbd330'}} label="WIP" value="wip" />
-              <Picker.Item style={{color: 'green'}} label="Done" value="done" />
+              <Picker.Item
+                key="todo"
+                style={{color: 'red'}}
+                label="To Do"
+                value="todo"
+              />
+              <Picker.Item
+                key="wip"
+                style={{color: '#dbd330'}}
+                label="WIP"
+                value="wip"
+              />
+              <Picker.Item
+                key="done"
+                style={{color: 'green'}}
+                label="Done"
+                value="done"
+              />
             </Picker>
             <Text style={[styles.taskText, styles[item.status]]}>
               {item.text}

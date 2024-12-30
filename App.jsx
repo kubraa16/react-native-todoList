@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React, {useState, useEffect} from 'react';
 import {View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -52,7 +53,7 @@ const App = () => {
   function addTodo() {
     if (!value.trim()) return;
     const newTask = {id: Date.now(), text: value, status: 'todo'};
-    setTasks(prevTasks => [...prevTasks, newTask]);
+    setTasks(prevTasks => [newTask, ...prevTasks]);
     setValue('');
   }
 
@@ -123,7 +124,10 @@ const App = () => {
               headerShown: false,
             })}>
             {Object.keys(tabs).map(tab => (
-              <Tab.Screen name={tabs[tab].label} options={{headerShown: false}}>
+              <Tab.Screen
+                key={tab}
+                name={tabs[tab].label}
+                options={{headerShown: false}}>
                 {() => (
                   <Todos
                     tasks={
