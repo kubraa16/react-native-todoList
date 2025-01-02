@@ -34,6 +34,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'absolute',
+    zIndex: 1,
   },
   modalBackdrop: {
     flex: 1,

@@ -1,5 +1,4 @@
-import CheckBox from '@react-native-community/checkbox';
-import React, {useState} from 'react';
+import React from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Picker} from '@react-native-picker/picker';
